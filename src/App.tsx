@@ -1,4 +1,3 @@
-import AddItems from "./pages/Inventory/AddItems"
 import AddEmployee from "./pages/Employee/AddEmployee"
 import ShowInventory from "./pages/Inventory/ShowInventory"
 import Login from "./pages/Login"
@@ -9,7 +8,6 @@ function App() {
 
   return (
       <div>
-        <AddItems />
         <AddEmployee />
         <ShowInventory />
         <br />

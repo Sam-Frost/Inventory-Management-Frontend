@@ -20,6 +20,8 @@ import AddEmployee from "./pages/Employee/AddEmployee.tsx";
 import ShowInventory from "./pages/Inventory/ShowInventory.tsx";
 import AddItems from "./pages/Inventory/AddItems.tsx";
 import AssignItems from "./pages/Inventory/AssignItems.tsx";
+import UpdateInventory from "./pages/Inventory/UpdateInventory.tsx";
+
 
 import Approval from "./pages/Approval/Approval.tsx";
 
@@ -54,7 +56,7 @@ const router = createBrowserRouter(
           <Route path="overview" element={<ShowInventory />} />
           <Route path="add" element={<AddItems />} />
           <Route path="assign" element={<AssignItems />} />
-          <Route path="update" element={<AddEmployee />} />
+          <Route path="update" element={<UpdateInventory />} />
         </Route>
 
         <Route path="approval">
@@ -62,13 +64,13 @@ const router = createBrowserRouter(
         </Route>
 
         <Route path="asset">
-          <Route path="overview" element={<ShowAsset />} />
-          <Route path="add" element={<AddAsset />} />
+          <Route path="overview" element={<AddAsset />} />
+          <Route path="add" element={<ShowAsset />} />
         </Route>
 
         <Route path="defective">
-          <Route path="overview" element={<ShowDefective />} />
-          <Route path="return" element={<AddDefective />} />
+          <Route path="overview" element={<AddDefective />} />
+          <Route path="return" element={<ShowDefective />} />
         </Route>
 
         <Route path="settings">

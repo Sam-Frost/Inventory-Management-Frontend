@@ -16,6 +16,8 @@ import {
     
   } from "lucide-react";
 
+export const BACKEND_URL = 'http://localhost:3000'
+
 export const menuList = [
     {
       group: "General",

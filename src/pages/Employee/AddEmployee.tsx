@@ -3,6 +3,8 @@
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { BACKEND_URL } from '@/constants'
+import axios from 'axios'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -14,6 +16,8 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+
+
 
 const validatePhoneNumber = (value: string) => {
   // Regular expression for basic phone number format (adjust as needed)
@@ -60,7 +64,12 @@ export function AddEmployee() {
   })
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+
+    const response = await axios.post(`${BACKEND_URL}/employee/create`, values);
+    
+    console.log(response)
+    console.log(response.data)
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
