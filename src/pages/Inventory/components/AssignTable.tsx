@@ -1,4 +1,7 @@
+
 import { useState } from "react"
+
+import { Button } from "@/components/ui/button"
 
 import {
   ColumnDef,
@@ -21,11 +24,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
-import { UpdateDialog } from "./components/UpdateDialog";
 
+import { AssignDialog } from "./AssignDialog";
+ 
 
 const data: Inventory[] = [
     {
@@ -110,71 +111,50 @@ const data: Inventory[] = [
   }
 
 
+
+
+
 export const columns: ColumnDef<Inventory>[] = [
     {
         accessorKey: "itemName",
-        header: ({ column }) => {
-          return (
-            <Button
-            // className="px-0"
-              variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Item Name
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          )
-        },
-        // header: "Item Name",
+        header: "Item Name",
     },
     {
         accessorKey: "partNumber",
-        header: () => <p className='px-4'>Part Number</p>,
-        // header: "Part Number",
+        header: "Part Number",
     },
     {
       accessorKey: "quantity",
-      header: ({ column }) => {
-        return (
-          <Button
-          // className="px-0"
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Quantity
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
-      // header: "Quantity",
+      header: "Quantity",
+    //   cell: ({row}) => [
+    //     <Input value={row.getValue('quantity')} type="number"/>
+    //   ]
     },
     {
         accessorKey: "price",
-        // header: "Price",
-        header: () => <p className='px-4'>Price</p>,
-        cell: ({row}) => {
-          const value = "₹ " +  row.getValue('price')
-          return (
-            value
-          )
-        }
+        header: "Price",
     },
     {
-      accessorKey: "itemId",
-      header: () => <p className='px-4'>Update</p>,
-      cell: ({row}) => {
-        return (
-          <UpdateDialog item={row.original}>
-            <Button variant='outline' > Update </Button>
-          </UpdateDialog>
-        )
-      }
-  }
-    
+        accessorKey: "itemId",
+        header: "Add Item",
+        cell: ({row}) => {
+            // return <Button variant="outline" onClick={() => {
+            //     row.getValue('itemId')
+            // }}> Add </Button>
+            return (
+                <AssignDialog item={row.original}>
+                     <Button variant="outline" size='sm' onClick={() => {
+                            row.getValue('itemId')
+                        }}
+                        className=""> Add </Button>
+                </AssignDialog>
+            )
+        }
+    }
     
   ]
 
-function UpdateInventory() {
+function AssignTable() {
 
     const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
@@ -204,18 +184,7 @@ function UpdateInventory() {
   })
 
   return (
-    <div className="w-full h-[90vh] rounded bg-white p-4 flex flex-row  ">
-      <div className="flex flex-col items-center w-full">
-      <Input
-          placeholder="Search Item..."
-          value={(table.getColumn("itemName")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("itemName")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-    <div className="rounded-md border  overflow-auto h-[70vh] w-11/12 mt-4">
-    
+    <div className="rounded-md border  overflow-auto h-[70vh] ">
         <Table className=""> 
           <TableHeader className="sticky top-0 ">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -243,7 +212,7 @@ function UpdateInventory() {
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="p-2">
+                    <TableCell key={cell.id} className="p-1">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -265,9 +234,7 @@ function UpdateInventory() {
           </TableBody>
         </Table>
       </div>
-      </div>
-    </div>
   )
 }
 
-export default UpdateInventory
+export default AssignTable

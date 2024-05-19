@@ -45,6 +45,8 @@ export function AddItems() {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
+    console.log(values)
+
     const response = await axios.post(`${BACKEND_URL}/employee/create`, values);
     
     console.log(response)

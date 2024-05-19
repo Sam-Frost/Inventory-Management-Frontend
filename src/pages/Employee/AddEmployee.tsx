@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input"
 
 
 
+
 const validatePhoneNumber = (value: string) => {
   // Regular expression for basic phone number format (adjust as needed)
   const phoneRegExp = /^\d+$/;
@@ -133,7 +134,7 @@ export function AddEmployee() {
             <FormItem>
               {/* <FormLabel>Password</FormLabel> */}
               <FormControl>
-                <Input placeholder="Password" {...field} />
+                <Input placeholder="Password" {...field} type='password'/>
               </FormControl>
               
               <FormMessage />
@@ -147,7 +148,7 @@ export function AddEmployee() {
             <FormItem>
               {/* <FormLabel>Confirm Password</FormLabel> */}
               <FormControl>
-                <Input placeholder="Confirm Password" {...field} />
+                <Input placeholder="Confirm Password" {...field} type='password'  />
               </FormControl>
               
               <FormMessage />

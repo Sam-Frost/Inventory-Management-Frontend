@@ -1,187 +1,242 @@
-import {
-    useReactTable,
-    getCoreRowModel,
-    flexRender,
-    ColumnDef,
-    SortingState,
-    getSortedRowModel,
-    ColumnFiltersState,
-    getFilteredRowModel,
-  
-  } from "@tanstack/react-table";
-  
-  import { ArrowUpDown } from "lucide-react"
-  import { useState } from "react";
-  
-  const data: Item[] = [
-    {
-      itemName: "Laptop",
-      partNumber: "PN-001",
-      quantity: 15,
-      price: 899.99,
-    },
-    {
-      itemName: "Smartphone",
-      partNumber: "PN-002",
-      quantity: 30,
-      price: 499.99,
-    },
-    {
-      itemName: "Tablet",
-      partNumber: "PN-003",
-      quantity: 25,
-      price: 299.99,
-    },
-    {
-      itemName: "Monitor",
-      partNumber: "PN-004",
-      quantity: 10,
-      price: 199.99,
-    },
-    {
-      itemName: "Keyboard",
-      partNumber: "PN-005",
-      quantity: 50,
-      price: 49.99,
-    },
-    {
-      itemName: "Mouse",
-      partNumber: "PN-006",
-      quantity: 40,
-      price: 29.99,
-    },
-    {
-      itemName: "Printer",
-      partNumber: "PN-007",
-      quantity: 8,
-      price: 159.99,
-    },
-    {
-      itemName: "Headphones",
-      partNumber: "PN-008",
-      quantity: 20,
-      price: 99.99,
-    },
-    {
-      itemName: "Webcam",
-      partNumber: "PN-009",
-      quantity: 12,
-      price: 59.99,
-    },
-    {
-      itemName: "Speakers",
-      partNumber: "PN-010",
-      quantity: 15,
-      price: 79.99,
-    },
-  ];
-  
-  type Item = {
-    itemName: string;
-    partNumber: string;
-    quantity: number;
-    price: number;
-  };
-  
-  export default function AssignItems() {
-    const columns: ColumnDef<Item>[] = [
-      {
-        header: ({ column }) => {
-          return (
-            <button
-              // variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Email
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </button>
-          )
-        },
-        accessorKey: "itemName",
-      },
-      {
-        header: "Part Number",
-        accessorKey: "partNumber",
-      },
-      {
-        header: "Quantity",
-        accessorKey: "quantity",
-      },
-      {
-        header: "Price",
-        accessorKey: "price",
-        cell: ({ row }) => {
-          const amount = parseFloat(row.getValue("price"));
-          const formatted = new Intl.NumberFormat("en-IN", {
-            style: "currency",
-            currency: "INR", // Update currency to "INR"
-          }).format(amount);
-  
-          return formatted;
-        },
-      },
-    ];
-  
-    const [sorting, setSorting] = useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  
-    const table = useReactTable({
-      data,
-      columns,
-      getCoreRowModel: getCoreRowModel(),
-      onSortingChange: setSorting,
-      getSortedRowModel: getSortedRowModel(),
-      onColumnFiltersChange: setColumnFilters,
-      getFilteredRowModel: getFilteredRowModel(),
-      state: {
-        sorting,
-        columnFilters
-      },
-    });
-  
-    return (
-      <div>
-        <h1>Assign Items</h1>
-        <div className="flex items-center py-4">
-          <input
-            placeholder="Filter emails..."
-            value={(table.getColumn("itemName")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("itemName")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-        </div>
-        <table>
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
+import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input"
+import AssignTable from "./components/AssignTable";
+
+
+type Employee = {
+  empId: number;
+  employeeName: string;
+};
+
+
+const ALL_EMPLOYEE: Employee[] = [
+  {
+    "empId": 1,
+    "employeeName": "Samarth Negi"
+  },
+  {
+    "empId": 2,
+    "employeeName": "Ishaan Patel"  // Random name
+  },
+  {
+    "empId": 3,
+    "employeeName": "Maya Garcia"  // Random name
+  },
+  {
+    "empId": 4,
+    "employeeName": "Dominic Nguyen"  // Random name
+  },
+  {
+    "empId": 5,
+    "employeeName": "Evelyn Kim"  // Random name
+  },
+  {
+    "empId": 6,
+    "employeeName": "Anthony Lewis"  // Random name
+  },
+  {
+    "empId": 7, 
+    "employeeName": "Sophia Lopez"  // Random name
+  },
+  {
+    "empId": 8,
+    "employeeName": "William Robinson"  // Random name
+  },
+  {
+    "empId": 9,
+    "employeeName": "Ava Clark"  // Random name
+  },
+  {
+    "empId": 10,
+    "employeeName": "Daniel Johnson"  // Random name
   }
+]
+
+const data: Inventory[] = [
+  {
+    itemId: 1,
+    itemName: "Wrench",
+    partNumber: "WR-001",
+    quantity: 50,
+    price: 12.99
+  },
+  {
+    itemId: 2,
+    itemName: "Screwdriver",
+    partNumber: "SD-002",
+    quantity: 150,
+    price: 8.49
+  },
+  {
+    itemId: 3,
+    itemName: "Hammer",
+    partNumber: "HM-003",
+    quantity: 85,
+    price: 15.75
+  },
+  {
+    itemId: 4,
+    itemName: "Pliers",
+    partNumber: "PL-004",
+    quantity: 60,
+    price: 10.99
+  },
+  {
+    itemId: 5,
+    itemName: "Drill",
+    partNumber: "DR-005",
+    quantity: 30,
+    price: 45.00
+  },
+  {
+    itemId: 6,
+    itemName: "Tape Measure",
+    partNumber: "TM-006",
+    quantity: 120,
+    price: 6.89
+  },
+  {
+    itemId: 7,
+    itemName: "Utility Knife",
+    partNumber: "UK-007",
+    quantity: 200,
+    price: 5.50
+  },
+  {
+    itemId: 8,
+    itemName: "Level",
+    partNumber: "LV-008",
+    quantity: 75,
+    price: 9.99
+  },
+  {
+    itemId: 9,
+    itemName: "Allen Key Set",
+    partNumber: "AK-009",
+    quantity: 40,
+    price: 18.25
+  },
+  {
+    itemId: 10,
+    itemName: "Socket Set",
+    partNumber: "SS-010",
+    quantity: 25,
+    price: 35.00
+  }
+];
+
+console.log(data)
+
+ 
+export type Inventory = {
+  itemId: number
+  itemName: string
+  partNumber: string
+  quantity: number
+  price: number
+}
+ 
+
+
+export function AssignItems() {
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]);
+  const [selectedEmployees, setselectedEmployees] = useState<Employee[]>([]);
+
+
+  useEffect(() => {
+    setFilteredEmployees(ALL_EMPLOYEE.filter( (employee) => {
+
+      if ( !(searchTerm.length === 0) ) 
+        {
+          return employee.employeeName.toLowerCase().startsWith(searchTerm.toLowerCase())
+        }
+
+    }))
+  }, [searchTerm])
   
+
+  function searchEmployeeClick(key: number, name: string) {
+    console.log("Employee Clicked")
+    console.log(name, key)
+    
+
+    const searchEmployee = {
+      empId: key,
+      employeeName: name
+    }
+
+    console.log(searchEmployee)
+    console.log(selectedEmployees)
+
+    const employeeExists = selectedEmployees.some((employee) => {
+      if ( employee.empId == key ) {
+        return true
+      }
+      return false
+    })
+
+    if ( employeeExists ) {
+        console.log("Employee already added!")
+      }
+    else {
+      console.log("Employee doesn't exist")
+      setselectedEmployees([...selectedEmployees, searchEmployee])
+    
+    }
+
+   
+  }
+
+  return (
+    <div className="w-full h-[90vh] rounded bg-white p-4 flex flex-row">
+      
+      <div>
+      <div>
+            { selectedEmployees.length > 0 ? ( 
+              <div>{selectedEmployees.map((employee) => {
+                return <p key={employee.empId}> {employee.employeeName} </p>
+              })}</div>
+            ) : (
+              <div>No Employee Selected!</div>
+              )
+            }
+          </div>
+          <Input type="text" onChange={(e) => {
+                setSearchTerm(e.target.value);
+                console.log(searchTerm)
+              }} placeholder="Employee Name" />
+
+              <div className="bg-slate-300">
+                {
+                  filteredEmployees.length > 0 ? (
+                    <ul>
+                      {filteredEmployees.map((employee) => {
+                        return(
+                          <li className='hover:bg-slate-300' key={employee.empId} onClick={() => { searchEmployeeClick(employee.empId, employee.employeeName) }}>{employee.employeeName}</li>
+                        )
+                      })}
+                    </ul>
+                  ) : ( 
+                  // <p>No user found</p> 
+                  <></>
+                )}
+              </div  >
+
+            <AssignTable />
+      </div>
+      <div>
+        Assigned Items
+      </div>
+      
+       
+          
+
+    </div>
+    
+  )
+}
+
+
+export default AssignItems
