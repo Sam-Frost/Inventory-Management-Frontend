@@ -16,6 +16,9 @@ import {
     
   } from "lucide-react";
 
+import { Inventory } from "./pages/Inventory/InventoryTypes";
+
+
 export const BACKEND_URL = 'http://localhost:3000'
 
 export const menuList = [
@@ -88,3 +91,146 @@ export const menuList = [
       ],
     },
   ];
+
+  export const data: Inventory[] = [
+    {
+        itemId: 1,
+        itemName: "Wrench",
+        partNumber: "WR-001",
+        quantity: 50,
+        price: 12.99
+    },
+    {
+        itemId: 2,
+        itemName: "Screwdriver",
+        partNumber: "SD-002",
+        quantity: 150,
+        price: 8.49
+    },
+    {
+        itemId: 3,
+        itemName: "Hammer",
+        partNumber: "HM-003",
+        quantity: 85,
+        price: 15.75
+    },
+    {
+        itemId: 4,
+        itemName: "Pliers",
+        partNumber: "PL-004",
+        quantity: 60,
+        price: 10.99
+    },
+    {
+        itemId: 5,
+        itemName: "Drill",
+        partNumber: "DR-005",
+        quantity: 30,
+        price: 45.00
+    },
+    {
+        itemId: 6,
+        itemName: "Tape Measure",
+        partNumber: "TM-006",
+        quantity: 120,
+        price: 6.89
+    },
+    {
+        itemId: 7,
+        itemName: "Utility Knife",
+        partNumber: "UK-007",
+        quantity: 200,
+        price: 5.50
+    },
+    {
+        itemId: 8,
+        itemName: "Level",
+        partNumber: "LV-008",
+        quantity: 75,
+        price: 9.99
+    },
+    {
+        itemId: 9,
+        itemName: "Allen Key Set",
+        partNumber: "AK-009",
+        quantity: 40,
+        price: 18.25
+    },
+    {
+        itemId: 10,
+        itemName: "Socket Set",
+        partNumber: "SS-010",
+        quantity: 25,
+        price: 35.00
+    },
+    {
+        itemId: 11,
+        itemName: "Sledgehammer",
+        partNumber: "SH-011",
+        quantity: 20,
+        price: 25.99
+    },
+    {
+        itemId: 12,
+        itemName: "Chisel",
+        partNumber: "CH-012",
+        quantity: 90,
+        price: 7.49
+    },
+    {
+        itemId: 13,
+        itemName: "Adjustable Wrench",
+        partNumber: "AW-013",
+        quantity: 40,
+        price: 14.99
+    },
+    {
+        itemId: 14,
+        itemName: "Hand Saw",
+        partNumber: "HS-014",
+        quantity: 55,
+        price: 13.99
+    },
+    {
+        itemId: 15,
+        itemName: "Cordless Drill",
+        partNumber: "CD-015",
+        quantity: 25,
+        price: 60.00
+    },
+    {
+        itemId: 16,
+        itemName: "Clamp",
+        partNumber: "CL-016",
+        quantity: 70,
+        price: 8.99
+    },
+    {
+        itemId: 17,
+        itemName: "Hacksaw",
+        partNumber: "HS-017",
+        quantity: 45,
+        price: 12.50
+    },
+    {
+        itemId: 18,
+        itemName: "Nail Gun",
+        partNumber: "NG-018",
+        quantity: 15,
+        price: 75.00
+    },
+    {
+        itemId: 19,
+        itemName: "Workbench",
+        partNumber: "WB-019",
+        quantity: 10,
+        price: 150.00
+    },
+    {
+        itemId: 20,
+        itemName: "Paint Sprayer",
+        partNumber: "PS-020",
+        quantity: 35,
+        price: 55.00
+    }
+];

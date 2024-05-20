@@ -26,95 +26,24 @@ import {
 } from "@/components/ui/table"
 
 import { AssignDialog } from "./AssignDialog";
- 
+import { data } from "@/constants";
 
-const data: Inventory[] = [
-    {
-      itemId: 1,
-      itemName: "Wrench",
-      partNumber: "WR-001",
-      quantity: 50,
-      price: 12.99
-    },
-    {
-      itemId: 2,
-      itemName: "Screwdriver",
-      partNumber: "SD-002",
-      quantity: 150,
-      price: 8.49
-    },
-    {
-      itemId: 3,
-      itemName: "Hammer",
-      partNumber: "HM-003",
-      quantity: 85,
-      price: 15.75
-    },
-    {
-      itemId: 4,
-      itemName: "Pliers",
-      partNumber: "PL-004",
-      quantity: 60,
-      price: 10.99
-    },
-    {
-      itemId: 5,
-      itemName: "Drill",
-      partNumber: "DR-005",
-      quantity: 30,
-      price: 45.00
-    },
-    {
-      itemId: 6,
-      itemName: "Tape Measure",
-      partNumber: "TM-006",
-      quantity: 120,
-      price: 6.89
-    },
-    {
-      itemId: 7,
-      itemName: "Utility Knife",
-      partNumber: "UK-007",
-      quantity: 200,
-      price: 5.50
-    },
-    {
-      itemId: 8,
-      itemName: "Level",
-      partNumber: "LV-008",
-      quantity: 75,
-      price: 9.99
-    },
-    {
-      itemId: 9,
-      itemName: "Allen Key Set",
-      partNumber: "AK-009",
-      quantity: 40,
-      price: 18.25
-    },
-    {
-      itemId: 10,
-      itemName: "Socket Set",
-      partNumber: "SS-010",
-      quantity: 25,
-      price: 35.00
-    }
-  ];
+
+import { Inventory } from "../InventoryTypes";
+import { Input } from "@/components/ui/input";
   
-   
-  export type Inventory = {
-    itemId: number
-    itemName: string
-    partNumber: string
-    quantity: number
-    price: number
-  }
+
+type AssignedItem = (item: Inventory) => void;
+
+interface AssignTableProps {
+  addAssignedItem: AssignedItem;
+}
 
 
+function AssignTable({addAssignedItem} : AssignTableProps) {
 
 
-
-export const columns: ColumnDef<Inventory>[] = [
+  const columns: ColumnDef<Inventory>[] = [
     {
         accessorKey: "itemName",
         header: "Item Name",
@@ -142,7 +71,7 @@ export const columns: ColumnDef<Inventory>[] = [
             //     row.getValue('itemId')
             // }}> Add </Button>
             return (
-                <AssignDialog item={row.original}>
+                <AssignDialog item={row.original} addAssignedItem={addAssignedItem}>
                      <Button variant="outline" size='sm' onClick={() => {
                             row.getValue('itemId')
                         }}
@@ -154,8 +83,6 @@ export const columns: ColumnDef<Inventory>[] = [
     
   ]
 
-function AssignTable() {
-
     const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
@@ -163,6 +90,9 @@ function AssignTable() {
   const [columnVisibility, setColumnVisibility] =
     useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
+
+
+  console.log(data)
  
   const table = useReactTable({
     data,
@@ -184,55 +114,67 @@ function AssignTable() {
   })
 
   return (
-    <div className="rounded-md border  overflow-auto h-[70vh] ">
-        <Table className=""> 
-          <TableHeader className="sticky top-0 ">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} >
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id} className="text-center">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow className="text-center"
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="p-1">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )} 
-                    </TableCell>
-                  ))}
+    <div className="rounded-md h-[70vh] overflow-auto ">
+        <Input
+          placeholder="Search Item..."
+          value={(table.getColumn("itemName")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("itemName")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        <div className="rounded-md h-[70vh] overflow-auto">
+          
+          <Table className="border" > 
+            <TableHeader className="sticky top-0 ">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id} >
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id} className="text-center">
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    )
+                  })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            <TableBody className="overflow-scroll bg-slate-100">
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow className="text-center"
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id} className="p-1">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )} 
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+
+        </div>
       </div>
   )
 }

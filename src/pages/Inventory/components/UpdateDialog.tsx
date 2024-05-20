@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ReactNode} from 'react';
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -11,12 +11,18 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Item } from '@/types';
 
 function updateQuanityInBackend(){
     console.log("sending data to backend")
 }
 
-export function UpdateDialog({children, item}) {
+interface UpdateDialogProps {
+  children: ReactNode,
+  item: Item
+}
+
+export function UpdateDialog({children, item}: UpdateDialogProps) {
 
     const [ increaseQuantity, setIncreaseQuantity ] = useState(0);
     const [ updatedQuantity, setUpdatedQuantity ] = useState(0);

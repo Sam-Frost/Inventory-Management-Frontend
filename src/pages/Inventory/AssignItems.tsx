@@ -1,242 +1,184 @@
 import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/input";
 import AssignTable from "./components/AssignTable";
+import AssignedTable from "./components/AssignedTable";
 
 
-type Employee = {
-  empId: number;
-  employeeName: string;
-};
-
+import { Employee } from "@/types";
 
 const ALL_EMPLOYEE: Employee[] = [
   {
-    "empId": 1,
-    "employeeName": "Samarth Negi"
+    empId: 1,
+    employeeName: "Samarth Negi",
   },
   {
-    "empId": 2,
-    "employeeName": "Ishaan Patel"  // Random name
+    empId: 2,
+    employeeName: "Ishaan Patel", // Random name
   },
   {
-    "empId": 3,
-    "employeeName": "Maya Garcia"  // Random name
+    empId: 3,
+    employeeName: "Maya Garcia", // Random name
   },
   {
-    "empId": 4,
-    "employeeName": "Dominic Nguyen"  // Random name
+    empId: 4,
+    employeeName: "Dominic Nguyen", // Random name
   },
   {
-    "empId": 5,
-    "employeeName": "Evelyn Kim"  // Random name
+    empId: 5,
+    employeeName: "Evelyn Kim", // Random name
   },
   {
-    "empId": 6,
-    "employeeName": "Anthony Lewis"  // Random name
+    empId: 6,
+    employeeName: "Anthony Lewis", // Random name
   },
   {
-    "empId": 7, 
-    "employeeName": "Sophia Lopez"  // Random name
+    empId: 7,
+    employeeName: "Sophia Lopez", // Random name
   },
   {
-    "empId": 8,
-    "employeeName": "William Robinson"  // Random name
+    empId: 8,
+    employeeName: "William Robinson", // Random name
   },
   {
-    "empId": 9,
-    "employeeName": "Ava Clark"  // Random name
+    empId: 9,
+    employeeName: "Ava Clark", // Random name
   },
   {
-    "empId": 10,
-    "employeeName": "Daniel Johnson"  // Random name
-  }
-]
-
-const data: Inventory[] = [
-  {
-    itemId: 1,
-    itemName: "Wrench",
-    partNumber: "WR-001",
-    quantity: 50,
-    price: 12.99
+    empId: 10,
+    employeeName: "Daniel Johnson", // Random name
   },
-  {
-    itemId: 2,
-    itemName: "Screwdriver",
-    partNumber: "SD-002",
-    quantity: 150,
-    price: 8.49
-  },
-  {
-    itemId: 3,
-    itemName: "Hammer",
-    partNumber: "HM-003",
-    quantity: 85,
-    price: 15.75
-  },
-  {
-    itemId: 4,
-    itemName: "Pliers",
-    partNumber: "PL-004",
-    quantity: 60,
-    price: 10.99
-  },
-  {
-    itemId: 5,
-    itemName: "Drill",
-    partNumber: "DR-005",
-    quantity: 30,
-    price: 45.00
-  },
-  {
-    itemId: 6,
-    itemName: "Tape Measure",
-    partNumber: "TM-006",
-    quantity: 120,
-    price: 6.89
-  },
-  {
-    itemId: 7,
-    itemName: "Utility Knife",
-    partNumber: "UK-007",
-    quantity: 200,
-    price: 5.50
-  },
-  {
-    itemId: 8,
-    itemName: "Level",
-    partNumber: "LV-008",
-    quantity: 75,
-    price: 9.99
-  },
-  {
-    itemId: 9,
-    itemName: "Allen Key Set",
-    partNumber: "AK-009",
-    quantity: 40,
-    price: 18.25
-  },
-  {
-    itemId: 10,
-    itemName: "Socket Set",
-    partNumber: "SS-010",
-    quantity: 25,
-    price: 35.00
-  }
 ];
 
-console.log(data)
-
- 
 export type Inventory = {
-  itemId: number
-  itemName: string
-  partNumber: string
-  quantity: number
-  price: number
-}
- 
-
+  itemId: number;
+  itemName: string;
+  partNumber: string;
+  quantity: number;
+  price: number;
+};
 
 export function AssignItems() {
-
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]);
   const [selectedEmployees, setselectedEmployees] = useState<Employee[]>([]);
+  const [assignedItems, setAssignedItems] = useState<Inventory[]>([]);
+  const [isEmployeeSearchFocused, setIsEmployeeSearchFocused] = useState<boolean>(false);
 
+  function addAssignedItem(item: Inventory) {
+    setAssignedItems([...assignedItems, item]);
+    console.log(assignedItems);
+  }
 
   useEffect(() => {
-    setFilteredEmployees(ALL_EMPLOYEE.filter( (employee) => {
-
-      if ( !(searchTerm.length === 0) ) 
-        {
-          return employee.employeeName.toLowerCase().startsWith(searchTerm.toLowerCase())
+    setFilteredEmployees(
+      // ALL_EMPLOYEE.filter((employee) => {
+      //   if (!(searchTerm.length === 0)) {
+      //     return employee.employeeName
+      //       .toLowerCase()
+      //       .startsWith(searchTerm.toLowerCase());
+      //   }
+      // })
+      ALL_EMPLOYEE.filter((employee) => {
+        const trimmedSearchTerm = searchTerm.trim();
+        if (trimmedSearchTerm.length === 0) {
+          return true; // Return all employees if searchTerm is empty or just whitespace
         }
-
-    }))
-  }, [searchTerm])
-  
+        return employee.employeeName.toLowerCase().startsWith(trimmedSearchTerm.toLowerCase());
+      })
+      
+    );
+  }, [searchTerm]);
 
   function searchEmployeeClick(key: number, name: string) {
-    console.log("Employee Clicked")
-    console.log(name, key)
-    
+    console.log("Employee Clicked");
+    console.log(name, key);
 
     const searchEmployee = {
       empId: key,
-      employeeName: name
-    }
+      employeeName: name,
+    };
 
-    console.log(searchEmployee)
-    console.log(selectedEmployees)
+    console.log(searchEmployee);
+    console.log(selectedEmployees);
 
     const employeeExists = selectedEmployees.some((employee) => {
-      if ( employee.empId == key ) {
-        return true
+      if (employee.empId == key) {
+        return true;
       }
-      return false
-    })
+      return false;
+    });
 
-    if ( employeeExists ) {
-        console.log("Employee already added!")
-      }
-    else {
-      console.log("Employee doesn't exist")
-      setselectedEmployees([...selectedEmployees, searchEmployee])
-    
+    if (employeeExists) {
+      console.log("Employee already added!");
+    } else {
+      console.log("Employee doesn't exist");
+      setselectedEmployees([...selectedEmployees, searchEmployee]);
     }
-
-   
   }
 
   return (
-    <div className="w-full h-[90vh] rounded bg-white p-4 flex flex-row">
-      
-      <div>
-      <div>
-            { selectedEmployees.length > 0 ? ( 
-              <div>{selectedEmployees.map((employee) => {
-                return <p key={employee.empId}> {employee.employeeName} </p>
-              })}</div>
-            ) : (
-              <div>No Employee Selected!</div>
-              )
-            }
-          </div>
-          <Input type="text" onChange={(e) => {
-                setSearchTerm(e.target.value);
-                console.log(searchTerm)
-              }} placeholder="Employee Name" />
+    <div className="w-full h-[90vh] rounded bg-white p-4 flex flex-row justify-between">
+      <div className="bg-slate-100 h-9/12 w-[35dvw] ml-4 p-3">
+        <div className="font-bold text-2xl text-center">Selections</div>
+          <Input
+            type="text"
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              console.log(searchTerm);
+            }}
+            onFocus={() => {
 
-              <div className="bg-slate-300">
-                {
-                  filteredEmployees.length > 0 ? (
-                    <ul>
-                      {filteredEmployees.map((employee) => {
-                        return(
-                          <li className='hover:bg-slate-300' key={employee.empId} onClick={() => { searchEmployeeClick(employee.empId, employee.employeeName) }}>{employee.employeeName}</li>
-                        )
-                      })}
-                    </ul>
-                  ) : ( 
-                  // <p>No user found</p> 
-                  <></>
-                )}
-              </div  >
+              console.log("setting trues")
+              setIsEmployeeSearchFocused(true);
+            }}
+            onBlur={() => {
+              console.log("setting false via timeout")
 
-            <AssignTable />
+              setTimeout(() => {
+              setIsEmployeeSearchFocused(false);
+              }, 100)
+            }}
+            placeholder="Search Employee..."
+          />
+
+          { isEmployeeSearchFocused ? (
+            <div className="absolute rounded p-1 bg-white z-30 w-4/12 mt-0.5">
+              <ul>
+                {filteredEmployees.map((employee) => {
+                  return (
+                    <li
+                      className="hover:bg-slate-300"
+                      key={employee.empId}
+                      onClick={() => {
+                        searchEmployeeClick(
+                          employee.empId,
+                          employee.employeeName
+                        );
+
+                    console.log("setting false by click")
+                      setIsEmployeeSearchFocused(false);
+
+                      }}
+                    >
+                      {employee.employeeName}
+                    </li>
+                    
+                  );
+                })}
+              </ul>
+            </div>
+          ) : (
+            <></>
+          )}
+
+        <AssignTable addAssignedItem={addAssignedItem} />
       </div>
-      <div>
-        Assigned Items
-      </div>
-      
-       
-          
 
+      <div className="bg-slate-300 w-[35dvw] mr-4">
+        <AssignedTable assignedItems={assignedItems} selectedEmployees={selectedEmployees} />
+      </div>
     </div>
-    
-  )
+  );
 }
 
-
-export default AssignItems
+export default AssignItems;

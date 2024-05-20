@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -12,13 +12,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export function AssignDialog({item, children}) {
+//@ts-ignore
+export function AssignDialog({item, addAssignedItem, children}) {
 
-  useEffect(() => {
-    console.log("Printing item")
-    console.log(item)
+  const [assingedQuantity, setAssignedQuantity] = useState(0)
 
-  }, [])
     return (
       <Dialog>
         <DialogTrigger asChild>
@@ -50,15 +48,20 @@ export function AssignDialog({item, children}) {
               </Label>
               <Input
                 id="quantity"
-                defaultValue="0"
+                onChange={(e) => {
+                  setAssignedQuantity(Number(e.target.value))
+                }}
                 type='number'
-                placeholder="0"
+                value={assingedQuantity}
                 className="col-span-3"
               />
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save changes</Button>
+            <Button type="submit"  onClick={() => {
+              item.quantity =  assingedQuantity
+              addAssignedItem(item)
+            }}>Assign</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
