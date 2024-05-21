@@ -17,9 +17,196 @@ import {
   } from "lucide-react";
 
 import { Inventory } from "./pages/Inventory/InventoryTypes";
+import { ApprovalDataType } from "./types";
 
 
 export const BACKEND_URL = 'http://localhost:3000'
+
+
+export const ApprovalData: ApprovalDataType[] = [
+  {
+    "date": "2024-05-01",
+    "employeeName": "John Doe",
+    "requestNumber": "REQ001",
+    "items": [
+      { "itemId": 1, "itemName": "Laptop", "quantity": 1, "price": 1500, "partNumber": "P001" },
+      { "itemId": 2, "itemName": "Mouse", "quantity": 1, "price": 25, "partNumber": "P002" }
+    ],
+    "status": "Pending"
+  },
+  {
+    "date": "2024-05-02",
+    "employeeName": "Jane Smith",
+    "requestNumber": "REQ002",
+    "items": [
+      { "itemId": 3, "itemName": "Keyboard", "quantity": 2, "price": 50, "partNumber": "P003" },
+      { "itemId": 4, "itemName": "Monitor", "quantity": 1, "price": 300, "partNumber": "P004" }
+    ],
+    "status": "Approved"
+  },
+  {
+    "date": "2024-05-03",
+    "employeeName": "Alice Johnson",
+    "requestNumber": "REQ003",
+    "items": [
+      { "itemId": 5, "itemName": "Chair", "quantity": 1, "price": 100, "partNumber": "P005" },
+      { "itemId": 6, "itemName": "Desk", "quantity": 1, "price": 200, "partNumber": "P006" }
+    ],
+    "status": "Rejected"
+  },
+  {
+    "date": "2024-05-04",
+    "employeeName": "Bob Brown",
+    "requestNumber": "REQ004",
+    "items": [
+      { "itemId": 7, "itemName": "Notebook", "quantity": 5, "price": 15, "partNumber": "P007" },
+      { "itemId": 8, "itemName": "Pen", "quantity": 10, "price": 5, "partNumber": "P008" }
+    ],
+    "status": "Pending"
+  },
+  {
+    "date": "2024-05-04",
+    "employeeName": "Bob Brown",
+    "requestNumber": "REQ004",
+    "items": [
+      { "itemId": 7, "itemName": "Notebook", "quantity": 5, "price": 15, "partNumber": "P007" },
+      { "itemId": 8, "itemName": "Pen", "quantity": 10, "price": 5, "partNumber": "P008" }
+    ],
+    "status": "Pending"
+  },
+  {
+    "date": "2024-05-04",
+    "employeeName": "Bob Brown",
+    "requestNumber": "REQ004",
+    "items": [
+      { "itemId": 7, "itemName": "Notebook", "quantity": 5, "price": 15, "partNumber": "P007" },
+      { "itemId": 8, "itemName": "Pen", "quantity": 10, "price": 5, "partNumber": "P008" }
+    ],
+    "status": "Pending"
+  },
+  {
+    "date": "2024-05-04",
+    "employeeName": "Bob Brown",
+    "requestNumber": "REQ004",
+    "items": [
+      { "itemId": 7, "itemName": "Notebook", "quantity": 5, "price": 15, "partNumber": "P007" },
+      { "itemId": 8, "itemName": "Pen", "quantity": 10, "price": 5, "partNumber": "P008" }
+    ],
+    "status": "Pending"
+  },
+  {
+    "date": "2024-05-04",
+    "employeeName": "Bob Brown",
+    "requestNumber": "REQ004",
+    "items": [
+      { "itemId": 7, "itemName": "Notebook", "quantity": 5, "price": 15, "partNumber": "P007" },
+      { "itemId": 8, "itemName": "Pen", "quantity": 10, "price": 5, "partNumber": "P008" }
+    ],
+    "status": "Pending"
+  },
+  {
+    "date": "2024-05-04",
+    "employeeName": "Bob Brown",
+    "requestNumber": "REQ004",
+    "items": [
+      { "itemId": 7, "itemName": "Notebook", "quantity": 5, "price": 15, "partNumber": "P007" },
+      { "itemId": 8, "itemName": "Pen", "quantity": 10, "price": 5, "partNumber": "P008" }
+    ],
+    "status": "Pending"
+  },
+  {
+    "date": "2024-05-04",
+    "employeeName": "Bob Brown",
+    "requestNumber": "REQ004",
+    "items": [
+      { "itemId": 7, "itemName": "Notebook", "quantity": 5, "price": 15, "partNumber": "P007" },
+      { "itemId": 8, "itemName": "Pen", "quantity": 10, "price": 5, "partNumber": "P008" }
+    ],
+    "status": "Pending"
+  },
+
+  {
+    "date": "2024-05-04",
+    "employeeName": "Bob Brown",
+    "requestNumber": "REQ004",
+    "items": [
+      { "itemId": 7, "itemName": "Notebook", "quantity": 5, "price": 15, "partNumber": "P007" },
+      { "itemId": 8, "itemName": "Pen", "quantity": 10, "price": 5, "partNumber": "P008" }
+    ],
+    "status": "Pending"
+  },
+  {
+    "date": "2024-05-04",
+    "employeeName": "Bob Brown",
+    "requestNumber": "REQ004",
+    "items": [
+      { "itemId": 7, "itemName": "Notebook", "quantity": 5, "price": 15, "partNumber": "P007" },
+      { "itemId": 8, "itemName": "Pen", "quantity": 10, "price": 5, "partNumber": "P008" }
+    ],
+    "status": "Pending"
+  },
+  {
+    "date": "2024-05-04",
+    "employeeName": "Bob Brown",
+    "requestNumber": "REQ004",
+    "items": [
+      { "itemId": 7, "itemName": "Notebook", "quantity": 5, "price": 15, "partNumber": "P007" },
+      { "itemId": 8, "itemName": "Pen", "quantity": 10, "price": 5, "partNumber": "P008" }
+    ],
+    "status": "Pending"
+  },
+  {
+    "date": "2024-05-04",
+    "employeeName": "Bob Brown",
+    "requestNumber": "REQ004",
+    "items": [
+      { "itemId": 7, "itemName": "Notebook", "quantity": 5, "price": 15, "partNumber": "P007" },
+      { "itemId": 8, "itemName": "Pen", "quantity": 10, "price": 5, "partNumber": "P008" }
+    ],
+    "status": "Pending"
+  },
+  {
+    "date": "2024-05-04",
+    "employeeName": "Bob Brown",
+    "requestNumber": "REQ004",
+    "items": [
+      { "itemId": 7, "itemName": "Notebook", "quantity": 5, "price": 15, "partNumber": "P007" },
+      { "itemId": 8, "itemName": "Pen", "quantity": 10, "price": 5, "partNumber": "P008" }
+    ],
+    "status": "Pending"
+  },
+  {
+    "date": "2024-05-04",
+    "employeeName": "Bob Brown",
+    "requestNumber": "REQ004",
+    "items": [
+      { "itemId": 7, "itemName": "Notebook", "quantity": 5, "price": 15, "partNumber": "P007" },
+      { "itemId": 8, "itemName": "Pen", "quantity": 10, "price": 5, "partNumber": "P008" }
+    ],
+    "status": "Pending"
+  },
+  {
+    "date": "2024-05-04",
+    "employeeName": "Bob Brown",
+    "requestNumber": "REQ004",
+    "items": [
+      { "itemId": 7, "itemName": "Notebook", "quantity": 5, "price": 15, "partNumber": "P007" },
+      { "itemId": 8, "itemName": "Pen", "quantity": 10, "price": 5, "partNumber": "P008" }
+    ],
+    "status": "Pending"
+  },
+  {
+    "date": "2024-05-04",
+    "employeeName": "Bob Brown",
+    "requestNumber": "REQ004",
+    "items": [
+      { "itemId": 7, "itemName": "Notebook", "quantity": 5, "price": 15, "partNumber": "P007" },
+      { "itemId": 8, "itemName": "Pen", "quantity": 10, "price": 5, "partNumber": "P008" }
+    ],
+    "status": "Pending"
+  },
+];
+
 
 export const menuList = [
     {

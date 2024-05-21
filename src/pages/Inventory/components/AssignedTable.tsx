@@ -1,46 +1,173 @@
-import { Button } from "@/components/ui/button"
-import { Employee, Item } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Employee } from "@/types";
 
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useState } from "react";
+import { Inventory } from "../InventoryTypes";
 
 type SelectedEmployees = Employee[];
-type AssignedItems = Item[];
+// type AssignedItems = Item[];
 
-interface AssignedTableProps  {
-  selectedEmployees: SelectedEmployees,
-  assignedItems: AssignedItems
-
+interface AssignedTableProps {
+  selectedEmployees: SelectedEmployees;
+  assignedItems: Inventory[];
 }
 
-function AssignedTable({assignedItems, selectedEmployees}: AssignedTableProps) {
+function AssignedTable({
+  assignedItems,
+  selectedEmployees,
+}: AssignedTableProps) {
+  const columns: ColumnDef<Inventory>[] = [
+    {
+      accessorKey: "itemName",
+      header: "Item Name",
+    },
+    {
+      accessorKey: "partNumber",
+      header: "Part Number",
+    },
+    {
+      accessorKey: "quantity",
+      header: "Quantity",
+    },
+    {
+      accessorKey: "price",
+      header: "Price",
+    },
+  ];
+
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
+
+  console.log(assignedItems);
+
+  const table = useReactTable({
+    data: assignedItems,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+  });
+
   return (
     <div>
-    <div>Assignments</div>
-    <div>
+      <div className="font-bold text-2xl text-center">Assignments</div>
+
+      <div className="bg-white p-2 rounded-md my-2 min-h-[4.5rem]">
+        <p>
+          <span className="text-lg font-bold">Employee: </span>
           {selectedEmployees.length > 0 ? (
-            <div>
+            <span>
               {selectedEmployees.map((employee: Employee) => {
-                return <p key={employee.empId}> {employee.employeeName} </p>;
+                if (
+                  selectedEmployees[selectedEmployees.length - 1] === employee
+                ) {
+                  // Last element of the array
+                  return (
+                    <span key={employee.empId}> {employee.employeeName} </span>
+                  );
+                } else {
+                  return (
+                    <span key={employee.empId}> {employee.employeeName}, </span>
+                  );
+                }
               })}
-            </div>
+            </span>
           ) : (
-            <div>No Employee Selected!</div>
+            <span>No Employee Selected Yet</span>
           )}
+        </p>
       </div>
-     { assignedItems.length > 0 ?
-          <div>
-            {assignedItems.map((item: Item) => {
-              return (
-                <div key={item.itemId}>{item.itemName} | {item.partNumber} | {item.quantity}| {item.price}</div>
-              )
-            })}
-          </div>
-          
-         : <div>Item Not Found</div>
-        
-        }
-    <Button variant='outline'>Assign</Button>
+
+      <div className="h-[62dvh] overflow-auto">
+        <Table className="border">
+          <TableHeader className="sticky top-0 ">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id} className="text-center">
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody className="overflow-scroll bg-slate-100">
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  className="text-center"
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id} className="p-3">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No item assigned.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex flex-row   items-center justify-end mt-2">
+        <Button variant="default" size="default">
+          Assign
+        </Button>
+      </div>
     </div>
-  )
+  );
 }
 
-export default AssignedTable
+export default AssignedTable;

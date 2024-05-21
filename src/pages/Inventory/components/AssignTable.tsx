@@ -11,7 +11,6 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
@@ -100,7 +99,6 @@ function AssignTable({addAssignedItem} : AssignTableProps) {
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
@@ -114,16 +112,16 @@ function AssignTable({addAssignedItem} : AssignTableProps) {
   })
 
   return (
-    <div className="rounded-md h-[70vh] overflow-auto ">
+    <div className="rounded-md h-[70vh] ">
         <Input
           placeholder="Search Item..."
           value={(table.getColumn("itemName")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("itemName")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="max-w-sm mb-2"
         />
-        <div className="rounded-md h-[70vh] overflow-auto">
+        <div className="rounded-md h-[65vh] overflow-auto ">
           
           <Table className="border" > 
             <TableHeader className="sticky top-0 ">

@@ -118,10 +118,11 @@ export function AssignItems() {
 
   return (
     <div className="w-full h-[90vh] rounded bg-white p-4 flex flex-row justify-between">
-      <div className="bg-slate-100 h-9/12 w-[35dvw] ml-4 p-3">
+      <div className="bg-slate-100 h-9/12 w-[37dvw] ml-1 p-3">
         <div className="font-bold text-2xl text-center">Selections</div>
           <Input
             type="text"
+            className="my-2"
             onChange={(e) => {
               setSearchTerm(e.target.value);
               console.log(searchTerm);
@@ -174,7 +175,7 @@ export function AssignItems() {
         <AssignTable addAssignedItem={addAssignedItem} />
       </div>
 
-      <div className="bg-slate-300 w-[35dvw] mr-4">
+      <div className="bg-slate-100 w-[37dvw] mr-1 p-4">
         <AssignedTable assignedItems={assignedItems} selectedEmployees={selectedEmployees} />
       </div>
     </div>

@@ -1,3 +1,4 @@
+"use client"
 import { useState } from "react"
 
 import {
@@ -8,7 +9,6 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
@@ -24,92 +24,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
+import { Item } from "@/types";
+import { data } from "@/constants";
 
-
-const data: Inventory[] = [
-    {
-      itemId: 1,
-      itemName: "Wrench",
-      partNumber: "WR-001",
-      quantity: 50,
-      price: 12.99
-    },
-    {
-      itemId: 2,
-      itemName: "Screwdriver",
-      partNumber: "SD-002",
-      quantity: 150,
-      price: 8.49
-    },
-    {
-      itemId: 3,
-      itemName: "Hammer",
-      partNumber: "HM-003",
-      quantity: 85,
-      price: 15.75
-    },
-    {
-      itemId: 4,
-      itemName: "Pliers",
-      partNumber: "PL-004",
-      quantity: 60,
-      price: 10.99
-    },
-    {
-      itemId: 5,
-      itemName: "Drill",
-      partNumber: "DR-005",
-      quantity: 30,
-      price: 45.00
-    },
-    {
-      itemId: 6,
-      itemName: "Tape Measure",
-      partNumber: "TM-006",
-      quantity: 120,
-      price: 6.89
-    },
-    {
-      itemId: 7,
-      itemName: "Utility Knife",
-      partNumber: "UK-007",
-      quantity: 200,
-      price: 5.50
-    },
-    {
-      itemId: 8,
-      itemName: "Level",
-      partNumber: "LV-008",
-      quantity: 75,
-      price: 9.99
-    },
-    {
-      itemId: 9,
-      itemName: "Allen Key Set",
-      partNumber: "AK-009",
-      quantity: 40,
-      price: 18.25
-    },
-    {
-      itemId: 10,
-      itemName: "Socket Set",
-      partNumber: "SS-010",
-      quantity: 25,
-      price: 35.00
-    }
-  ];
-  
    
-  export type Inventory = {
-    itemId: number
-    itemName: string
-    partNumber: string
-    quantity: number
-    price: number
-  }
-
-
-export const columns: ColumnDef<Inventory>[] = [
+export const columns: ColumnDef<Item>[] = [
     {
         accessorKey: "itemName",
         header: ({ column }) => {
@@ -177,7 +96,6 @@ function ShowInventory() {
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
@@ -191,17 +109,23 @@ function ShowInventory() {
   })
 
   return (
-    <div className="w-full h-[90vh] rounded bg-white p-4 flex flex-row  ">
-      <div className="flex flex-col items-center w-full">
-      <Input
-          placeholder="Search Item..."
-          value={(table.getColumn("itemName")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("itemName")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-    <div className="rounded-md border  overflow-auto h-[70vh] w-11/12 mt-4">
+    <div className="w-full h-[90vh] rounded bg-white p-4">
+        <div className="flex justify-between items-center">
+          <Input
+            placeholder="Search Item..."
+            value={(table.getColumn("itemName")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("itemName")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+          <Button
+            variant="outline"
+            size="sm"
+          >Download</Button>
+        </div>
+      
+        <div className="rounded-md border  overflow-auto h-[70vh] mt-4 w-full">
     
         <Table className=""> 
           <TableHeader className="sticky top-0 ">
@@ -252,7 +176,7 @@ function ShowInventory() {
           </TableBody>
         </Table>
       </div>
-      </div>
+
     </div>
   )
 }

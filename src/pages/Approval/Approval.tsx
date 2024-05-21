@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -12,13 +12,11 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
-import { ArrowUpDown  } from "lucide-react"
+import { Button } from "@/components/ui/button";
 
-import { Button } from "@/components/ui/button"
-
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -26,102 +24,111 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
-import EmployeeProfile from "@/pages/Employee/EmployeeProfile"
+import { ApprovalData } from "@/constants";
+import { ApprovalDataType } from "@/types";
+import { ItemDetails } from "./ItemDetails";
+import { Inventory } from "../Inventory/InventoryTypes";
 
-const data: Payment[] = [
-  { "id": 1, "name": "John Doe", phoneNumber: "+1234567890", "position": "Software Engineer" },
-  { "id": 2, "name": "Jane Smith", phoneNumber: "+9876543210", "position": "Project Manager" },
-  { "id": 3, "name": "Michael Lee", phoneNumber: "+5678901234", "position": "Marketing Director" },
-  { "id": 4, "name": "Emily Jones", phoneNumber: "+3456789012", "position": "Human Resources Specialist" },
-  { "id": 5, "name": "David Williams", phoneNumber: "+1098765432", "position": "Web Developer" },
-  { "id": 6, "name": "Sarah Brown", phoneNumber: "+2345678901", "position": "Graphic Designer" },
-  { "id": 7, "name": "Matthew Miller", phoneNumber: "+7890123456", "position": "Sales Manager" },
-  { "id": 8, "name": "Jennifer Garcia", phoneNumber: "+8901234567", "position": "Accountant" },
-  { "id": 9, "name": "Daniel Hernandez", phoneNumber: "+9012345678", "position": "Customer Service Representative" },
-  { "id": 10, "name": "Ashley Moore", phoneNumber: "+0123456789", "position": "Content Writer" },
-  { "id": 11, "name": "Kevin Robinson", phoneNumber: "+1234560987", "position": "Data Analyst" },
-  { "id": 12, "name": "Amanda Allen", phoneNumber: "+2345601234", "position": "Network Engineer" },
-  { "id": 13, "name": "Christopher Clark", phoneNumber: "+3456012345", "position": "Software Tester" },
-  { "id": 14, "name": "Jessica Wright", phoneNumber: "+4560123456", "position": "Business Analyst" },
-  { "id": 15, "name": "Andrew Johnson", phoneNumber: "+5601234567", "position": "Systems Administrator" },
-  { "id": 16, "name": "Elizabeth Lopez", phoneNumber: "+6789012345", "position": "Quality Assurance Engineer" },
-  { "id": 17, "name": "Joseph Lewis", phoneNumber: "+7890123456", "position": "Product Manager" },
-  { "id": 18, "name": "Nicole Garcia", phoneNumber: "+8901234567", "position": "Front-End Developer" },
-  { "id": 19, "name": "Robert Walker", phoneNumber: "+9012345678", "position": "Back-End Developer" },
-  { "id": 20, "name": "Kimberly Young", phoneNumber: "+0123456789", "position": "Full-Stack Developer" }
+
+export const itemsData: Inventory[] = [
+  {
+      itemId: 1,
+      itemName: "Wrench",
+      partNumber: "WR-001",
+      quantity: 50,
+      price: 12.99
+  },
+  {
+      itemId: 2,
+      itemName: "Screwdriver",
+      partNumber: "SD-002",
+      quantity: 150,
+      price: 8.49
+  },
+  {
+      itemId: 3,
+      itemName: "Hammer",
+      partNumber: "HM-003",
+      quantity: 85,
+      price: 15.75
+  },
+  {
+      itemId: 4,
+      itemName: "Pliers",
+      partNumber: "PL-004",
+      quantity: 60,
+      price: 10.99
+  }
 ]
 
-export type Payment = {
-  id: number
-  name: string
-  phoneNumber: string
-  position: string
-}
-
-export const columns: ColumnDef<Payment>[] = [
-     
+export const columns: ColumnDef<ApprovalDataType>[] = [
   {
-    accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+    accessorKey: "date",
+    header: "Date",
   },
   {
-    accessorKey: "phoneNumber",
-    header: () => <div className="text-right">Phone Number</div>,
-    cell: ({ row }) => {
-
-      // const amount = parseFloat(row.getValue("amount"))
-
-      // // Format the amount as a dollar amount
-      // const formatted = new Intl.NumberFormat("en-US", {
-      //   style: "currency",
-      //   currency: "USD",
-      // }).format(amount)
-
-      return <div className="text-right font-medium">{row.getValue("phoneNumber")}</div>
-    },
+    accessorKey: "employeeName",
+    header: "Employee Name",
   },
   {
-    accessorKey: "position",
-    header: "Position",
+    accessorKey: "requestNumber",
+    header: "Request Number",
+  },
+  {
+    accessorKey: "items",
+    header: "Inventory",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("position")}</div>
+      <ItemDetails itemDetails={itemsData}>
+      {/* <ItemDetails itemDeatils={row.original}> */}
+        <Button variant="outline">View Items{row.getValue('requestNumber')}</Button>
+      </ItemDetails>
     ),
   },
   {
-    accessorKey: "position",
-    header: "Profile",
-    cell: () => (
-      <EmployeeProfile />
-    ),
+    accessorKey: "status",
+    header: "Action",
+    cell: ({ row }) => {
+      const status = row.getValue("status");
+
+      if (status === "Pending") {
+        return (
+          <div>
+            <Button
+              size="sm"
+              variant="secondary"
+              className="mr-1 hover:bg-green-300"
+            >
+              Approve
+            </Button>
+            <Button
+              size="sm"
+              variant="secondary"
+              className="ml-1 hover:bg-red-300"
+            >
+              Deny
+            </Button>
+          </div>
+        );
+      }
+
+      return status;
+    },
   },
-  
-  
-]
+];
 
 export function Approval() {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  )
+  );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data,
+    data: ApprovalData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -139,64 +146,41 @@ export function Approval() {
     },
     initialState: {
       pagination: {
-        pageSize: 15
-      }
-    }
-  })
+        pageSize: 9,
+      },
+    },
+  });
 
   return (
-    <div className="w-full h-dvh rounded p-4">
+    <div className="w-full h-[90dvh] rounded p-4 bg-white">
       <div className="flex items-center justify-between py-4">
         <Input
-          placeholder="Search Employee"
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          placeholder="Search Employee..."
+          value={
+            (table.getColumn("employeeName")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            table.getColumn("employeeName")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >Download</Button>
-        {/* <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                )
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu> */}
-        
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Download
+        </Button>
       </div>
-      <div className="rounded-md border  overflow-auto h-dvh">
-        <Table className=""> 
+      <div className="rounded-md border overflow-auto h-[70dvh]">
+        <Table className="">
           <TableHeader className="sticky top-0">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="text-center">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -204,7 +188,7 @@ export function Approval() {
                             header.getContext()
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -215,13 +199,20 @@ export function Approval() {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  // className={
+                  //   row.getValue("status") === "Approved"
+                  //     ? "bg-green-300"
+                  //     : row.getValue("status") === "Rejected"
+                  //     ? "bg-red-300"
+                  //     : ""
+                  // }
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="p-2">
+                    <TableCell key={cell.id} className="p-2 text-center">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
-                      )} 
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -261,11 +252,15 @@ export function Approval() {
           >
             Next
           </Button>
+          <div>
+            {table.getPageCount()}
+            -
+            {table.getPageOptions()}
+          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-
-export default Approval
+export default Approval;

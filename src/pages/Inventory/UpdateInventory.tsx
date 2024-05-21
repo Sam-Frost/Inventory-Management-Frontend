@@ -8,7 +8,6 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
@@ -25,92 +24,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { UpdateDialog } from "./components/UpdateDialog";
-
-
-const data: Inventory[] = [
-    {
-      itemId: 1,
-      itemName: "Wrench",
-      partNumber: "WR-001",
-      quantity: 50,
-      price: 12.99
-    },
-    {
-      itemId: 2,
-      itemName: "Screwdriver",
-      partNumber: "SD-002",
-      quantity: 150,
-      price: 8.49
-    },
-    {
-      itemId: 3,
-      itemName: "Hammer",
-      partNumber: "HM-003",
-      quantity: 85,
-      price: 15.75
-    },
-    {
-      itemId: 4,
-      itemName: "Pliers",
-      partNumber: "PL-004",
-      quantity: 60,
-      price: 10.99
-    },
-    {
-      itemId: 5,
-      itemName: "Drill",
-      partNumber: "DR-005",
-      quantity: 30,
-      price: 45.00
-    },
-    {
-      itemId: 6,
-      itemName: "Tape Measure",
-      partNumber: "TM-006",
-      quantity: 120,
-      price: 6.89
-    },
-    {
-      itemId: 7,
-      itemName: "Utility Knife",
-      partNumber: "UK-007",
-      quantity: 200,
-      price: 5.50
-    },
-    {
-      itemId: 8,
-      itemName: "Level",
-      partNumber: "LV-008",
-      quantity: 75,
-      price: 9.99
-    },
-    {
-      itemId: 9,
-      itemName: "Allen Key Set",
-      partNumber: "AK-009",
-      quantity: 40,
-      price: 18.25
-    },
-    {
-      itemId: 10,
-      itemName: "Socket Set",
-      partNumber: "SS-010",
-      quantity: 25,
-      price: 35.00
-    }
-  ];
+import { data } from "@/constants";
+import { Item } from "@/types";
   
-   
-  export type Inventory = {
-    itemId: number
-    itemName: string
-    partNumber: string
-    quantity: number
-    price: number
-  }
-
-
-export const columns: ColumnDef<Inventory>[] = [
+export const columns: ColumnDef<Item>[] = [
     {
         accessorKey: "itemName",
         header: ({ column }) => {
@@ -190,7 +107,7 @@ function UpdateInventory() {
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    // getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,

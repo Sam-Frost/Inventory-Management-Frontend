@@ -10,3 +10,14 @@ export type Item = {
     quantity: number,
     price: number
   }
+
+  export type ApprovalDataType = {
+    date: string,
+    employeeName: string,
+    requestNumber: string,
+    items: Item[],
+    status: ApprovalStatus
+  }
+
+
+  export type ApprovalStatus =  'Pending' | 'Approved' | 'Rejected'
