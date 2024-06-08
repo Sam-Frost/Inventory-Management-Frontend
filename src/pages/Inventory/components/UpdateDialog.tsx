@@ -14,22 +14,47 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import axios from 'axios';
 
 import { Item } from '@/types';
+import { BACKEND_URL } from '@/constants';
 
-function updateQuanityInBackend(){
-    console.log("sending data to backend")
-}
 
 interface UpdateDialogProps {
   children: ReactNode,
-  item: Item
+  item: Item,
+  onSuccess: () => void
 }
 
-export function UpdateDialog({children, item}: UpdateDialogProps) {
+export function UpdateDialog({children, item, onSuccess}: UpdateDialogProps) {
 
     const [ increaseQuantity, setIncreaseQuantity ] = useState(0);
     const [ updatedQuantity, setUpdatedQuantity ] = useState(0);
+    const [ updating, setUpdating] = useState(false)
+
+    async function updateQuanityInBackend(){
+      console.log("sending data to backend")
+  
+      try {
+        setUpdating(true)
+          const response = await axios.post(`${BACKEND_URL}/item/update`, {
+            itemId: item.itemId,
+            quantity: increaseQuantity
+          })
+
+          onSuccess()
+
+          console.log("SUCCESS!")
+          console.log("Axios Response : ", response)
+          console.log("Axios Response.data : ", response.data)
+        setUpdating(false)
+
+      } catch (err) {
+          console.log("An error occured : ", err)
+          setUpdating(false)
+
+      }
+  }
 
     useEffect( () => {
         setIncreaseQuantity(0)
@@ -77,6 +102,7 @@ export function UpdateDialog({children, item}: UpdateDialogProps) {
               onChange={(e) => {
                 setIncreaseQuantity(Number(e.target.value))
               }}
+              disabled={updating}
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -93,7 +119,7 @@ export function UpdateDialog({children, item}: UpdateDialogProps) {
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={updateQuanityInBackend}>Update</Button>
+          <Button type="submit" onClick={updateQuanityInBackend} disabled={updating}>{updating ?  "Updating...": "Update"}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

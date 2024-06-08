@@ -1,6 +1,6 @@
 export type Employee = {
     empId: number;
-    employeeName: string;
+    name: string;
   };
   
 export type Item = {

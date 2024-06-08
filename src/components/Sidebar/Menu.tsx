@@ -26,26 +26,6 @@ interface SubItemProps {
   text: string;
 }
 
-// function MenuSubItem({ link, icon, text }: SubItemProps) {
-//   return (
-//     <div>
-//       {link ? ( // Wrap with NavLink only if link exists
-//         <NavLink
-//           to={link}
-//           className="flex row items-center gap-2 px-2 text-sm p-1.5 rounded hover:bg-slate-100 hover:cursor-pointer"
-//         >
-//           {icon}
-//           {text}
-//         </NavLink>
-//       ) : (
-//         <div className="flex row items-center gap-2 px-2 text-sm p-1.5 rounded hover:bg-slate-100 hover:cursor-pointer">
-//           {icon}
-//           {text}
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
 
 function MenuSubItem({ link, icon, text }: SubItemProps) {
   return (

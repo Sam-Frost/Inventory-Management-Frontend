@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from 'react'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -17,6 +18,10 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
+import { useRecoilValue } from 'recoil'
+import { adminInfoState } from "@/Atoms/admin"
+import CustomAlert from '@/components/CustomAlert'
+
 
 
 const formSchema = z.object({
@@ -30,7 +35,29 @@ const formSchema = z.object({
 
 type FormFields = z.infer<typeof formSchema>;
 
+interface ItemRequestBody extends FormFields {
+  location: string
+}
+
 export function AddItems() {
+
+  const adminInfo = useRecoilValue(adminInfoState)
+
+  const [ loading, setLoading ] = useState(false)
+
+  const [ error, setError ] = useState(false)
+  const [ success, setSuccess ] = useState(false)
+
+
+  const [ errorDetail, setErrorDetail ] = useState({
+    title: "",
+    description: ""
+  })
+
+  const setErrorFalse = () => setError(false)
+
+  const setSuccessFalse = () => setSuccess(false)
+  
   // 1. Define your form.
   const form = useForm<FormFields>({
     resolver: zodResolver(formSchema),
@@ -42,18 +69,63 @@ export function AddItems() {
     },
   })
 
+
+
+  const resetForm = () => {
+    form.reset({
+      itemName: "",
+      partNumber: "",
+      quantity: 0,
+      price: 0,
+    });
+  };
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
-    console.log(values)
+    let location;
 
-    const response = await axios.post(`${BACKEND_URL}/employee/create`, values);
+    if (adminInfo !=  null) {
+      location = adminInfo.location;
+    } else {
+      location = ''
+    }
+
+    const itemValues: ItemRequestBody | null = {
+      ...values,
+       // eslint-disable-next-line react-hooks/rules-of-hooks
+      location 
+    }
+
+    console.log(itemValues)
+
+    try {
+
+      const response = await axios.post(`${BACKEND_URL}/item/create`, itemValues);
+
+      if ( response.status === 201 ) {
+        setSuccess(true)
+        resetForm()
+        console.log(response.data)
+      } else {
+        setError(true)
+      }
+      setLoading(false)
+
+    } catch (err) {
+      console.log("An error occured : ", err)
+      resetForm()
+      setError(true)
+      setErrorDetail({
+        title: "Error",
+        description: "An Unknown Error Occured!"
+      })
+      setLoading(false)
+
+    }
+
     
-    console.log(response)
-    console.log(response.data)
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+
   }
 
   return (
@@ -122,9 +194,12 @@ export function AddItems() {
           )}
         />
         <div className="flex flex-row justify-center items-center"> 
-          <Button type="submit" className="px-6 text-lg">Submit</Button>
+          <Button disabled={loading} type="submit" className="px-6 text-lg">Submit</Button>
         </div>
       </form>
+      { error ? <CustomAlert title={errorDetail.title} description={errorDetail.description} setErrorOrSuccess={setErrorFalse} variant='destructive'></CustomAlert> : <></>}
+      { success ? <CustomAlert title="Item added!" description="Item has been successfully created!" setErrorOrSuccess={setSuccessFalse} ></CustomAlert> : <></>}
+
     </Form>
   )
 }

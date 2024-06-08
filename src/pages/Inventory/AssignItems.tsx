@@ -3,51 +3,14 @@ import { Input } from "@/components/ui/input";
 import AssignTable from "./components/AssignTable";
 import AssignedTable from "./components/AssignedTable";
 
-
 import { Employee } from "@/types";
 
-const ALL_EMPLOYEE: Employee[] = [
-  {
-    empId: 1,
-    employeeName: "Samarth Negi",
-  },
-  {
-    empId: 2,
-    employeeName: "Ishaan Patel", // Random name
-  },
-  {
-    empId: 3,
-    employeeName: "Maya Garcia", // Random name
-  },
-  {
-    empId: 4,
-    employeeName: "Dominic Nguyen", // Random name
-  },
-  {
-    empId: 5,
-    employeeName: "Evelyn Kim", // Random name
-  },
-  {
-    empId: 6,
-    employeeName: "Anthony Lewis", // Random name
-  },
-  {
-    empId: 7,
-    employeeName: "Sophia Lopez", // Random name
-  },
-  {
-    empId: 8,
-    employeeName: "William Robinson", // Random name
-  },
-  {
-    empId: 9,
-    employeeName: "Ava Clark", // Random name
-  },
-  {
-    empId: 10,
-    employeeName: "Daniel Johnson", // Random name
-  },
-];
+import axios from "axios";
+import { BACKEND_URL } from "@/constants";
+
+import { useRecoilValue } from "recoil";
+import { adminInfoState } from "@/Atoms/admin";
+
 
 export type Inventory = {
   itemId: number;
@@ -57,12 +20,41 @@ export type Inventory = {
   price: number;
 };
 
+
 export function AssignItems() {
+
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]);
   const [selectedEmployees, setselectedEmployees] = useState<Employee[]>([]);
   const [assignedItems, setAssignedItems] = useState<Inventory[]>([]);
   const [isEmployeeSearchFocused, setIsEmployeeSearchFocused] = useState<boolean>(false);
+  const [allEmployees, setAllEmployees] = useState<Employee[]>([])
+
+
+  const adminInfo = useRecoilValue(adminInfoState);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log("Reading all employee data123123123132132");
+        console.log(adminInfo);
+        const response = await axios.get(`${BACKEND_URL}/employee/forAssignment/`, {
+          params : {
+            location: adminInfo?.location
+          }
+        });
+        console.log(response);
+        setAllEmployees(response.data);
+        console.log(allEmployees)
+        console.log("DONENENNE123123123113231");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
 
   function addAssignedItem(item: Inventory) {
     setAssignedItems([...assignedItems, item]);
@@ -78,12 +70,12 @@ export function AssignItems() {
       //       .startsWith(searchTerm.toLowerCase());
       //   }
       // })
-      ALL_EMPLOYEE.filter((employee) => {
+      allEmployees.filter((employee) => {
         const trimmedSearchTerm = searchTerm.trim();
         if (trimmedSearchTerm.length === 0) {
           return true; // Return all employees if searchTerm is empty or just whitespace
         }
-        return employee.employeeName.toLowerCase().startsWith(trimmedSearchTerm.toLowerCase());
+        return employee.name.toLowerCase().startsWith(trimmedSearchTerm.toLowerCase());
       })
       
     );
@@ -95,7 +87,7 @@ export function AssignItems() {
 
     const searchEmployee = {
       empId: key,
-      employeeName: name,
+      name: name,
     };
 
     console.log(searchEmployee);
@@ -118,7 +110,7 @@ export function AssignItems() {
 
   return (
     <div className="w-full h-[90vh] rounded bg-white p-4 flex flex-row justify-between">
-      <div className="bg-slate-100 h-9/12 w-[37dvw] ml-1 p-3">
+      <div className="bg-slate-100 h-9/12 w-[48%] ml-1 p-3">
         <div className="font-bold text-2xl text-center">Selections</div>
           <Input
             type="text"
@@ -153,7 +145,7 @@ export function AssignItems() {
                       onClick={() => {
                         searchEmployeeClick(
                           employee.empId,
-                          employee.employeeName
+                          employee.name
                         );
 
                     console.log("setting false by click")
@@ -161,7 +153,7 @@ export function AssignItems() {
 
                       }}
                     >
-                      {employee.employeeName}
+                      {employee.name}
                     </li>
                     
                   );
@@ -175,7 +167,7 @@ export function AssignItems() {
         <AssignTable addAssignedItem={addAssignedItem} />
       </div>
 
-      <div className="bg-slate-100 w-[37dvw] mr-1 p-4">
+      <div className="bg-slate-100 w-[48%] mr-1 p-4">
         <AssignedTable assignedItems={assignedItems} selectedEmployees={selectedEmployees} />
       </div>
     </div>

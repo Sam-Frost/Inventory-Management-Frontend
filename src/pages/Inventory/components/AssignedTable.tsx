@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button";
 import { Employee } from "@/types";
 
@@ -21,8 +22,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+
+import axios from 'axios';
+
 import { Inventory } from "../InventoryTypes";
+import { BACKEND_URL } from '@/constants';
+
+
+import { useRecoilValue } from 'recoil'
+import { adminInfoState } from "@/Atoms/admin"
+
 
 type SelectedEmployees = Employee[];
 // type AssignedItems = Item[];
@@ -60,7 +69,33 @@ function AssignedTable({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
+
+  const adminInfo = useRecoilValue(adminInfoState)
   console.log(assignedItems);
+
+  // useEffect(() => {
+
+  //   const fetchData = async () => {
+  //     try {
+  //       console.log("GETINNG EMPLOYEREE DSTA")
+  //       console.log(adminInfo)
+  //       const response = await axios.get(`${BACKEND_URL}/employee/`, {params: {
+  //         location: adminInfo?.location
+  //       }});
+  //       console.log(response)
+  //       setData(response.data);
+  //       console.log("DONENENNE")
+
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+    
+  //   fetchData();
+
+  // }, [])
+
+
 
   const table = useReactTable({
     data: assignedItems,
@@ -80,6 +115,8 @@ function AssignedTable({
     },
   });
 
+
+
   return (
     <div>
       <div className="font-bold text-2xl text-center">Assignments</div>
@@ -95,11 +132,11 @@ function AssignedTable({
                 ) {
                   // Last element of the array
                   return (
-                    <span key={employee.empId}> {employee.employeeName} </span>
+                    <span key={employee.empId}> {employee.name} </span>
                   );
                 } else {
                   return (
-                    <span key={employee.empId}> {employee.employeeName}, </span>
+                    <span key={employee.empId}> {employee.name}, </span>
                   );
                 }
               })}

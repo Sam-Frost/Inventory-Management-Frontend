@@ -16,6 +16,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Phone, Briefcase } from "lucide-react"
 
 
+import { useRecoilValue } from 'recoil'
+import { adminInfoState } from "@/Atoms/admin"
+
+
 function EmployeeProfile() {
   return (
     <Dialog>

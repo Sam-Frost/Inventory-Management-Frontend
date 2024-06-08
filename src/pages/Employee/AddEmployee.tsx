@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from 'react';
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -16,6 +17,11 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+
+import { useRecoilValue } from 'recoil'
+import { adminInfoState } from "@/Atoms/admin"
+
+import CustomAlert from '@/components/CustomAlert';
 
 
 
@@ -34,7 +40,7 @@ const validatePhoneNumberErrorMessage = {
 
 
 const formSchema = z.object({
-  employeeName: z.string().trim().min(1, "Employee name can't be empty"),
+  name: z.string().trim().min(1, "Employee name can't be empty"),
   phoneNumber: z.string().trim().min(10, "Phone number needs to be 10 digits").max(10, "Phone number needs to be 10 digits").refine(validatePhoneNumber, validatePhoneNumberErrorMessage),
   position: z.string().trim().min(1, "Position can't be empty"),
   password: z.string().trim().min(8, "Password can't be less than 8 characters"),
@@ -51,12 +57,32 @@ const formSchema = z.object({
 
 type FormFields = z.infer<typeof formSchema>;
 
+interface EmployeeRequestBody extends FormFields {
+  location: string
+}
+
 export function AddEmployee() {
+
+  const adminInfo = useRecoilValue(adminInfoState)
+
+  const [ loading, setLoading ] = useState(false)
+  const [ error, setError ] = useState(false)
+  const [ success, setSuccess ] = useState(false)
+
+  const [ errorDetail, setErrorDetail ] = useState({
+    title: "",
+    description: ""
+  })
+
+  const setErrorFalse = () => setError(false)
+
+  const setSuccessFalse = () => setSuccess(false)
+
   // 1. Define your form.
   const form = useForm<FormFields>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      employeeName: "",
+      name: "",
       phoneNumber: "",
       position: "",
       password: "",
@@ -64,16 +90,62 @@ export function AddEmployee() {
     },
   })
 
+
+  const resetForm = () => {
+    form.reset({
+      name: "",
+      phoneNumber: "",
+      position: "",
+      password: "",
+      confirmPassword: "",
+      // Add other fields with their default values if necessary
+    });
+  };
+
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true)
 
-    const response = await axios.post(`${BACKEND_URL}/employee/create`, values);
+    let location;
+
+    if (adminInfo !=  null) {
+      location = adminInfo.location;
+    } else {
+      location = ''
+    }
+
+    const employeeValues: EmployeeRequestBody | null = {
+      ...values,
+       // eslint-disable-next-line react-hooks/rules-of-hooks
+      location 
+    }
     
-    console.log(response)
-    console.log(response.data)
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+    try {
+      const response = await axios.post(`${BACKEND_URL}/employee/create`, employeeValues);
+
+      if ( response.status === 201 ) {
+        setSuccess(true)
+        resetForm()
+      } else {
+        setError(true)
+      }
+      
+      console.log(response)
+      console.log(response.data)
+      // Do something with the form values.
+      // ✅ This will be type-safe and validated.
+      console.log(values)
+      setLoading(false)
+    } catch (err) {
+      resetForm()
+      setError(true)
+      setErrorDetail({
+        title: "Error",
+        description: "An Unknown Error Occured!"
+      })
+      setLoading(false)
+    }
   }
 
   return (
@@ -86,7 +158,7 @@ export function AddEmployee() {
       
       
       <FormField
-          name="employeeName"
+          name="name"
           control={form.control}
           render={({ field }) => (
             <FormItem>
@@ -156,9 +228,11 @@ export function AddEmployee() {
           )}
         />
         <div className="flex flex-row justify-center items-center"> 
-          <Button type="submit" className="px-6 text-lg">Submit</Button>
+          <Button disabled={loading} type="submit" className="px-6 text-lg" >Submit</Button>
         </div>
       </form>
+      { error ? <CustomAlert title={errorDetail.title} description={errorDetail.description} setErrorOrSuccess={setErrorFalse} variant='destructive'></CustomAlert> : <></>}
+      { success ? <CustomAlert title="Employee added!" description="Employee has been successfully created!" setErrorOrSuccess={setSuccessFalse} ></CustomAlert> : <></>}
     </Form>
   )
 }

@@ -80,7 +80,7 @@ export function AddAsset() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 bg-white w-6/12 h-4/6 p-6 rounded border-2 ">
       
       <div className="flex flex-row justify-center items-center"> 
-        <p className="font-bold text-3xl">Registration </p> 
+        <p className="font-bold text-3xl">Asset </p> 
       </div>
       
       

@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import { useEffect, useState} from "react"
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -29,31 +29,14 @@ import {
 } from "@/components/ui/table"
 import EmployeeProfile from "./EmployeeProfile"
 
-const data: Payment[] = [
-  { "id": 1, "name": "John Doe", phoneNumber: "+1234567890", "position": "Software Engineer" },
-  { "id": 2, "name": "Jane Smith", phoneNumber: "+9876543210", "position": "Project Manager" },
-  { "id": 3, "name": "Michael Lee", phoneNumber: "+5678901234", "position": "Marketing Director" },
-  { "id": 4, "name": "Emily Jones", phoneNumber: "+3456789012", "position": "Human Resources Specialist" },
-  { "id": 5, "name": "David Williams", phoneNumber: "+1098765432", "position": "Web Developer" },
-  { "id": 6, "name": "Sarah Brown", phoneNumber: "+2345678901", "position": "Graphic Designer" },
-  { "id": 7, "name": "Matthew Miller", phoneNumber: "+7890123456", "position": "Sales Manager" },
-  { "id": 8, "name": "Jennifer Garcia", phoneNumber: "+8901234567", "position": "Accountant" },
-  { "id": 9, "name": "Daniel Hernandez", phoneNumber: "+9012345678", "position": "Customer Service Representative" },
-  { "id": 10, "name": "Ashley Moore", phoneNumber: "+0123456789", "position": "Content Writer" },
-  { "id": 11, "name": "Kevin Robinson", phoneNumber: "+1234560987", "position": "Data Analyst" },
-  { "id": 12, "name": "Amanda Allen", phoneNumber: "+2345601234", "position": "Network Engineer" },
-  { "id": 13, "name": "Christopher Clark", phoneNumber: "+3456012345", "position": "Software Tester" },
-  { "id": 14, "name": "Jessica Wright", phoneNumber: "+4560123456", "position": "Business Analyst" },
-  { "id": 15, "name": "Andrew Johnson", phoneNumber: "+5601234567", "position": "Systems Administrator" },
-  { "id": 16, "name": "Elizabeth Lopez", phoneNumber: "+6789012345", "position": "Quality Assurance Engineer" },
-  { "id": 17, "name": "Joseph Lewis", phoneNumber: "+7890123456", "position": "Product Manager" },
-  { "id": 18, "name": "Nicole Garcia", phoneNumber: "+8901234567", "position": "Front-End Developer" },
-  { "id": 19, "name": "Robert Walker", phoneNumber: "+9012345678", "position": "Back-End Developer" },
-  { "id": 20, "name": "Kimberly Young", phoneNumber: "+0123456789", "position": "Full-Stack Developer" }
-]
+import axios from 'axios'
+import { BACKEND_URL } from "@/constants"
+
+import { useRecoilValue } from 'recoil'
+import { adminInfoState } from "@/Atoms/admin"
 
 export type Payment = {
-  id: number
+  empId: number
   name: string
   phoneNumber: string
   position: string
@@ -100,7 +83,7 @@ export const columns: ColumnDef<Payment>[] = [
     ),
   },
   {
-    accessorKey: "position",
+    accessorKey: "id",
     header: "Profile",
     cell: () => (
       <EmployeeProfile />
@@ -111,13 +94,40 @@ export const columns: ColumnDef<Payment>[] = [
 ]
 
 export function AllEmployee() {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+
+
+  const [data, setData] = useState<Payment[]>([])
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
+
+  const adminInfo = useRecoilValue(adminInfoState)
+  
+  useEffect(()=> {
+
+    const fetchData = async () => {
+      try {
+        console.log("GETINNG EMPLOYEREE DSTA")
+        console.log(adminInfo)
+        const response = await axios.get(`${BACKEND_URL}/employee/`, {params: {
+          location: adminInfo?.location
+        }});
+        console.log(response)
+        setData(response.data);
+        console.log("DONENENNE")
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    
+    fetchData();
+
+  }, [])
 
   const table = useReactTable({
     data,
