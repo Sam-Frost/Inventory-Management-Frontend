@@ -19,8 +19,7 @@ import {
 import { Inventory } from "./pages/Inventory/InventoryTypes";
 import { ApprovalDataType } from "./types";
 
-
-export const BACKEND_URL = process.env.BACKEND_URL
+export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
 
 export const ApprovalData: ApprovalDataType[] = [
