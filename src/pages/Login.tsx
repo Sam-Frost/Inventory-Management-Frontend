@@ -73,6 +73,7 @@ function Login() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsSubmitting(true);
+      console.log(`Backend URL : ${BACKEND_URL}`)
       const response = await axios.post(`${BACKEND_URL}/auth/login`, values);
       console.log(response.data);
 
