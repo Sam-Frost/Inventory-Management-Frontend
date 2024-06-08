@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Button } from "@/components/ui/button";
 import { Employee } from "@/types";
 
@@ -23,14 +23,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import axios from 'axios';
+// import axios from 'axios';
 
 import { Inventory } from "../InventoryTypes";
-import { BACKEND_URL } from '@/constants';
+// import { BACKEND_URL } from '@/constants';
 
 
-import { useRecoilValue } from 'recoil'
-import { adminInfoState } from "@/Atoms/admin"
+// import { useRecoilValue } from 'recoil'
+// import { adminInfoState } from "@/Atoms/admin"
 
 
 type SelectedEmployees = Employee[];
@@ -70,7 +70,7 @@ function AssignedTable({
   const [rowSelection, setRowSelection] = useState({});
 
 
-  const adminInfo = useRecoilValue(adminInfoState)
+  // const adminInfo = useRecoilValue(adminInfoState)
   console.log(assignedItems);
 
   // useEffect(() => {

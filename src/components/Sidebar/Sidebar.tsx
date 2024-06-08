@@ -21,9 +21,11 @@ function Sidebar() {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginAtom);
 
   useEffect(() => {
+    // PRINITNG TO FIX BUILD ERROR
+    console.log(adminInfo)
     console.log("isLoggedIn : " + isLoggedIn)
 
-  }, [isLoggedIn])
+  }, [isLoggedIn, adminInfo])
 
 
   const navigate = useNavigate();
