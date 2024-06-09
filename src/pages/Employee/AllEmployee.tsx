@@ -115,7 +115,8 @@ export function AllEmployee() {
         console.log(adminInfo)
         const response = await axios.get(`${BACKEND_URL}/employee/`, {params: {
           location: adminInfo?.location
-        }});
+        },
+        withCredentials: true});
         console.log(response)
         setData(response.data);
         console.log("DONENENNE")
