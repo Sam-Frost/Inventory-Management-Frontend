@@ -33,11 +33,12 @@ import { Inventory } from "../InventoryTypes";
 // import { adminInfoState } from "@/Atoms/admin"
 
 
-type SelectedEmployees = Employee[];
-// type AssignedItems = Item[];
+// type SelectedEmployees = Employee[];
+type SelectedEmployees = Employee;
+
 
 interface AssignedTableProps {
-  selectedEmployees: SelectedEmployees;
+  selectedEmployees: SelectedEmployees | undefined;
   assignedItems: Inventory[];
 }
 
@@ -121,10 +122,11 @@ function AssignedTable({
     <div>
       <div className="font-bold text-2xl text-center">Assignments</div>
 
-      <div className="bg-white p-2 rounded-md my-2 min-h-[4.5rem]">
+      {/* <div className="bg-white p-2 rounded-md my-2 min-h-[4.5rem]"> */}
+      <div className="bg-white p-2 rounded-md my-2 ">
         <p>
           <span className="text-lg font-bold">Employee: </span>
-          {selectedEmployees.length > 0 ? (
+          {/* {selectedEmployees.length > 0 ? (
             <span>
               {selectedEmployees.map((employee: Employee) => {
                 if (
@@ -143,7 +145,12 @@ function AssignedTable({
             </span>
           ) : (
             <span>No Employee Selected Yet</span>
-          )}
+          )} */}
+          {
+            selectedEmployees ? <span key={selectedEmployees.empId}> {selectedEmployees.name} </span>
+            : <></>
+          }
+            
         </p>
       </div>
 

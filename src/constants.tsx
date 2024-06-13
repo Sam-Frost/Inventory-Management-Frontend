@@ -5,7 +5,7 @@ import {
     Settings,
     ShieldAlert,
     User,
-    Wrench,
+    // Wrench,
     UserPlus,
     ListChecks,
     CircleArrowRight,
@@ -241,15 +241,15 @@ export const menuList = [
           icon: <NotebookPen />,
           text: "Approval",
         },
-        {
-          link: "",
-          icon: <Wrench />,
-          text: "Asset",
-          subItems: [
-              { link: "/admin/asset/overview", icon: <UserPlus />, text: "Add" },
-              { link: "/admin/asset/add", icon: <UsersRound />, text: "Manage" }
-            ],
-        },
+        // {
+        //   link: "",
+        //   icon: <Wrench />,
+        //   text: "Asset",
+        //   subItems: [
+        //       { link: "/admin/asset/overview", icon: <UserPlus />, text: "Add" },
+        //       { link: "/admin/asset/add", icon: <UsersRound />, text: "Manage" }
+        //     ],
+        // },
         {
           link: "",
           icon: <ShieldAlert />,

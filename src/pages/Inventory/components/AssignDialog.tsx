@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -16,6 +16,20 @@ import { Label } from "@/components/ui/label"
 export function AssignDialog({item, addAssignedItem, children}) {
 
   const [assingedQuantity, setAssignedQuantity] = useState(0)
+  const [isQuantityInvalid, setIsQuantityInvalid] = useState(false)
+
+  useEffect(() => {
+
+    if(assingedQuantity > item.quantity) {
+      setIsQuantityInvalid(true)
+    } else if (assingedQuantity < 0) {
+      setIsQuantityInvalid(true)
+    } else {
+      setIsQuantityInvalid(false)
+    }
+
+
+  }, [assingedQuantity])
 
     return (
       <Dialog>
@@ -58,7 +72,7 @@ export function AssignDialog({item, addAssignedItem, children}) {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit"  onClick={() => {
+            <Button type="submit"  disabled={isQuantityInvalid} onClick={() => {
               item.quantity =  assingedQuantity
               addAssignedItem(item)
             }}>Assign</Button>

@@ -61,7 +61,7 @@ export const columns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: "phoneNumber",
-    header: () => <div className="text-right">Phone Number</div>,
+    header: () => <div className="">Phone Number</div>,
     cell: ({ row }) => {
 
       // const amount = parseFloat(row.getValue("amount"))
@@ -72,7 +72,7 @@ export const columns: ColumnDef<Payment>[] = [
       //   currency: "USD",
       // }).format(amount)
 
-      return <div className="text-right font-medium">{row.getValue("phoneNumber")}</div>
+      return <div className="font-medium">{row.getValue("phoneNumber")}</div>
     },
   },
   {
@@ -173,7 +173,7 @@ export function AllEmployee() {
           >Download</Button>
       </div>
       <div className="rounded-md border  overflow-auto h-[70vh]">
-        <Table className=""> 
+        <Table className="">
           <TableHeader className="sticky top-0">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -196,11 +196,12 @@ export function AllEmployee() {
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
+                  className="text-center"
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="p-2 text-center">
+                    <TableCell key={cell.id} className="p-2">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

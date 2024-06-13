@@ -11,7 +11,6 @@ import { BACKEND_URL } from "@/constants";
 import { useRecoilValue } from "recoil";
 import { adminInfoState } from "@/Atoms/admin";
 
-
 export type Inventory = {
   itemId: number;
   itemName: string;
@@ -25,7 +24,7 @@ export function AssignItems() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]);
-  const [selectedEmployees, setselectedEmployees] = useState<Employee[]>([]);
+  const [selectedEmployees, setselectedEmployees] = useState<Employee>();
   const [assignedItems, setAssignedItems] = useState<Inventory[]>([]);
   const [isEmployeeSearchFocused, setIsEmployeeSearchFocused] = useState<boolean>(false);
   const [allEmployees, setAllEmployees] = useState<Employee[]>([])
@@ -63,13 +62,6 @@ export function AssignItems() {
 
   useEffect(() => {
     setFilteredEmployees(
-      // ALL_EMPLOYEE.filter((employee) => {
-      //   if (!(searchTerm.length === 0)) {
-      //     return employee.employeeName
-      //       .toLowerCase()
-      //       .startsWith(searchTerm.toLowerCase());
-      //   }
-      // })
       allEmployees.filter((employee) => {
         const trimmedSearchTerm = searchTerm.trim();
         if (trimmedSearchTerm.length === 0) {
@@ -93,24 +85,28 @@ export function AssignItems() {
     console.log(searchEmployee);
     console.log(selectedEmployees);
 
-    const employeeExists = selectedEmployees.some((employee) => {
-      if (employee.empId == key) {
-        return true;
-      }
-      return false;
-    });
+    // const employeeExists = selectedEmployees.some((employee) => {
+    //   if (employee.empId == key) {
+    //     return true;
+    //   }
+    //   return false;
+    // });
 
-    if (employeeExists) {
-      console.log("Employee already added!");
-    } else {
-      console.log("Employee doesn't exist");
-      setselectedEmployees([...selectedEmployees, searchEmployee]);
-    }
+    // if (employeeExists) {
+    //   console.log("Employee already added!");
+    // } else {
+    //   console.log("Employee doesn't exist");
+    //   setselectedEmployees([...selectedEmployees, searchEmployee]);
+    // }
+    setselectedEmployees( searchEmployee);
+
   }
 
   return (
     <div className="w-full h-[90vh] rounded bg-white p-4 flex flex-row justify-between">
       <div className="bg-slate-100 h-9/12 w-[48%] ml-1 p-3">
+      <div>
+      </div>
         <div className="font-bold text-2xl text-center">Selections</div>
           <Input
             type="text"
@@ -164,7 +160,7 @@ export function AssignItems() {
             <></>
           )}
 
-        <AssignTable addAssignedItem={addAssignedItem} />
+        <AssignTable addAssignedItem={addAssignedItem} assignedItems={assignedItems}/>
       </div>
 
       <div className="bg-slate-100 w-[48%] mr-1 p-4">

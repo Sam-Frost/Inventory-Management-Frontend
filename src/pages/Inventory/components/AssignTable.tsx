@@ -39,9 +39,10 @@ type AssignedItem = (item: Inventory) => void;
 
 interface AssignTableProps {
   addAssignedItem: AssignedItem;
+  assignedItems: Inventory[];
 }
 
-function AssignTable({ addAssignedItem }: AssignTableProps) {
+function AssignTable({ addAssignedItem, assignedItems}: AssignTableProps) {
   const columns: ColumnDef<Inventory>[] = [
     {
       accessorKey: "itemName",
@@ -66,14 +67,16 @@ function AssignTable({ addAssignedItem }: AssignTableProps) {
       accessorKey: "itemId",
       header: "Add Item",
       cell: ({ row }) => {
-        // return <Button variant="outline" onClick={() => {
-        //     row.getValue('itemId')
-        // }}> Add </Button>
+      
+      // Check if the item is already assigned
+      const isItemAlreadyAssigned = assignedItems.some((item) => item.itemId === row.getValue("itemId"));
+
         return (
           <AssignDialog item={row.original} addAssignedItem={addAssignedItem}>
             <Button
               variant="outline"
               size="sm"
+              disabled={isItemAlreadyAssigned}
               onClick={() => {
                 row.getValue("itemId");
               }}
