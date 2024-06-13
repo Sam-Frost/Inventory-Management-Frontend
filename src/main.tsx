@@ -11,7 +11,7 @@ import { RecoilRoot } from "recoil";
 
 import "./index.css";
 import Layout from "./Layout.tsx";
-import Home from "./pages/Home.tsx";
+// import Home from "./pages/Home.tsx";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard.tsx";
 import App from "./App.tsx";
 
@@ -40,7 +40,7 @@ import Login from "./pages/Login.tsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/">
-      <Route path="" element={<Home />} />
+      <Route path="" element={<Login />} />
       <Route path="login" element={<Login />} />
 
      
