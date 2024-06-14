@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Button } from "@/components/ui/button";
 import { Employee } from "@/types";
-
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -13,7 +12,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -22,15 +20,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-// import axios from 'axios';
-
+import axios from 'axios';
 import { Inventory } from "../InventoryTypes";
-// import { BACKEND_URL } from '@/constants';
-
-
-// import { useRecoilValue } from 'recoil'
-// import { adminInfoState } from "@/Atoms/admin"
+import { BACKEND_URL } from '@/constants';
+import { useRecoilValue } from 'recoil'
+import { adminInfoState } from "@/Atoms/admin"
 
 
 // type SelectedEmployees = Employee[];
@@ -71,30 +65,8 @@ function AssignedTable({
   const [rowSelection, setRowSelection] = useState({});
 
 
-  // const adminInfo = useRecoilValue(adminInfoState)
+  const adminInfo = useRecoilValue(adminInfoState)
   console.log(assignedItems);
-
-  // useEffect(() => {
-
-  //   const fetchData = async () => {
-  //     try {
-  //       console.log("GETINNG EMPLOYEREE DSTA")
-  //       console.log(adminInfo)
-  //       const response = await axios.get(`${BACKEND_URL}/employee/`, {params: {
-  //         location: adminInfo?.location
-  //       }});
-  //       console.log(response)
-  //       setData(response.data);
-  //       console.log("DONENENNE")
-
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
-    
-  //   fetchData();
-
-  // }, [])
 
 
 
@@ -116,7 +88,22 @@ function AssignedTable({
     },
   });
 
+  async function sendDataToBackend() {
 
+  const data = {
+    empId: selectedEmployees?.empId,
+    items: assignedItems,
+    location: adminInfo?.location
+  }
+    try {
+      const response = await axios.post(`${BACKEND_URL}/item/assign`, data)
+      console.log(response.data)
+      window.location.reload()
+    } catch (err)  {
+      console.log(err)
+      window.location.reload()
+    }
+  }
 
   return (
     <div>
@@ -206,7 +193,7 @@ function AssignedTable({
         </Table>
       </div>
       <div className="flex flex-row   items-center justify-end mt-2">
-        <Button variant="default" size="default">
+        <Button variant="default" size="default" onClick={sendDataToBackend}>
           Assign
         </Button>
       </div>
